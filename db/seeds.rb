@@ -1,7 +1,29 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+require 'open-uri'
+require 'json'
+
+RushingStat.delete_all
+
+file = File.read("rushing.json")
+parsedData = JSON.parse(file)
+  parsedData.each do |stat|
+  RushingStat.create(
+      {
+        player: stat["Player"],
+        team: stat["Team"],
+        position: stat["Pos"],
+        attempts: stat["Att"],
+        attempts_per_game: stat["Att/G"],
+        yds: stat["Yds"],
+        avg: stat["Avg"],
+        yds_per_game: stat["Yds/G"],
+        td: stat["TD"],
+        lng: stat["Lng"],
+        first_downs: stat["1st"],
+        first_down_percentage: stat["1st%"],
+        rushes_gt_twenty_yds: stat["20+"],
+        rushes_gt_forty_yds: stat["40+"],
+        fumbles: stat["FUM"],
+      }
+  )
+end
+puts "seed completed successfully!"
